@@ -63,9 +63,9 @@ export default function Catalog() {
   }
 
   return (
-    <main className="flex flex-col min-h-screen pt-24 pb-24 px-24">
+    <main className="flex flex-col min-h-screen pt-24 pb-24 px-5 md:px-24">
       <h1 className="text-4xl font-bold text-[#3B3B3B]">Top Sellers</h1>
-      <div className="flex items-center justify-end gap-5">
+      <div className="flex items-center justify-start md:justify-end gap-5 md:mt-0 mt-5">
         <b className="border-e-2 pr-6">Genre</b>
         <select
           name="genre"
@@ -85,7 +85,7 @@ export default function Catalog() {
           ))}
         </select>
       </div>
-      <ul className="grid grid-cols-3 gap-10 pt-10">
+      <ul className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-10 pt-10">
         {isLoading ? (
           <li className="text-xl animate-bounce py-5">Loading...</li>
         ) : (

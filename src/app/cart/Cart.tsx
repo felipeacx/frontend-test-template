@@ -18,14 +18,14 @@ const Cart = () => {
   }, [])
 
   return (
-    <main className="flex flex-col pt-24 pb-24 px-24">
+    <main className="flex flex-col pt-24 pb-24 px-5 md:px-24">
       <Link className="" href="/">
         ← Back to Catalog
       </Link>
       <h1 className="text-4xl font-bold mt-10">Your Cart</h1>
       <p className="mb-10">{cart.length} items</p>
       <div className="grid grid-cols-2 gap-10">
-        <ul className="col-span-1">
+        <ul className="md:col-span-1 col-span-2">
           {cart.map((item: Game) => (
             <li key={item.id} className="flex p-3">
               <Image
@@ -54,7 +54,7 @@ const Cart = () => {
             </li>
           ))}
         </ul>
-        <div className="col-span-1">
+        <div className="md:col-span-1 col-span-2">
           <div className="border-2 rounded-2xl p-5">
             <h2 className="text-2xl font-bold">Order Summary</h2>
             <p className="text-lg mb-8">{cart.length} items</p>
