@@ -9,8 +9,12 @@ const Cart = () => {
   const [cart, setCart] = useState<Game[]>([])
 
   const getCart = () => {
-    const cart: Game[] = JSON.parse(window.localStorage.getItem("cart") || "[]")
-    setCart(cart)
+    try {
+      const cart: Game[] = JSON.parse(window.localStorage.getItem("cart") || "[]")
+      setCart(cart)
+    } catch (error) {
+      setCart([])
+    }
   }
 
   useEffect(() => {

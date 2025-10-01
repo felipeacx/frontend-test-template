@@ -28,8 +28,12 @@ export default function Catalog() {
   }
 
   const getCart = () => {
-    const cart: Game[] = JSON.parse(window.localStorage.getItem("cart") || "[]")
-    setCart(cart)
+    try {
+      const cart: Game[] = JSON.parse(window.localStorage.getItem("cart") || "[]")
+      setCart(cart)
+    } catch (error) {
+      setCart([])
+    }
   }
 
   useEffect(() => {
@@ -45,21 +49,29 @@ export default function Catalog() {
   }
 
   const addToCart = (game: Game) => {
-    const cart = JSON.parse(window.localStorage.getItem("cart") || "[]")
-    cart.push(game)
-    window.localStorage.setItem("cart", JSON.stringify(cart))
-    window.alert(`${game.name} has been added to your cart!`)
-    getData()
-    getCart()
+    try {
+      const cart = JSON.parse(window.localStorage.getItem("cart") || "[]")
+      cart.push(game)
+      window.localStorage.setItem("cart", JSON.stringify(cart))
+      window.alert(`${game.name} has been added to your cart!`)
+      getData()
+      getCart()
+    } catch (error) {
+      console.error("Error adding to cart:", error)
+    }
   }
 
   const removeFromCart = (game: Game) => {
-    const cart = JSON.parse(window.localStorage.getItem("cart") || "[]")
-    const updatedCart = cart.filter((item: Game) => item.id !== game.id)
-    window.localStorage.setItem("cart", JSON.stringify(updatedCart))
-    window.alert(`${game.name} has been removed from your cart!`)
-    getData()
-    getCart()
+    try {
+      const cart = JSON.parse(window.localStorage.getItem("cart") || "[]")
+      const updatedCart = cart.filter((item: Game) => item.id !== game.id)
+      window.localStorage.setItem("cart", JSON.stringify(updatedCart))
+      window.alert(`${game.name} has been removed from your cart!`)
+      getData()
+      getCart()
+    } catch (error) {
+      console.error("Error removing from cart:", error)
+    }
   }
 
   return (
