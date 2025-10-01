@@ -12,21 +12,30 @@ export default function Catalog() {
   const [availableFilters, setAvailableFilters] = useState<string[]>([])
   const [totalPages, setTotalPages] = useState<number>(1)
   const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [cart, setCart] = useState<Game[]>([])
 
-  useEffect(() => {
+  const getData = async () => {
+    setIsLoading(true)
     const genreParam = filterGenre === "all" ? "" : encodeURIComponent(filterGenre)
     const url = `/api/games?genre=${genreParam}&page=${page}`
     const request = new Request(url, { method: "GET" })
-    const getData = async () => {
-      setIsLoading(true)
-      const response = await GET(request)
-      const data = await response.json()
-      setGames(data.games ?? [])
-      setAvailableFilters(data.availableFilters ?? ["all"])
-      setTotalPages(data.totalPages ?? 1)
-      setIsLoading(false)
-    }
+    const response = await GET(request)
+    const data = await response.json()
+    setGames(data.games ?? [])
+    setAvailableFilters(data.availableFilters ?? ["all"])
+    setTotalPages(data.totalPages ?? 1)
+    setIsLoading(false)
+  }
+
+  const getCart = () => {
+    const cart: Game[] = JSON.parse(window.localStorage.getItem("cart") || "[]")
+    setCart(cart)
+  }
+
+  useEffect(() => {
     getData()
+    getCart()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filterGenre, page])
 
   const handleClickSeeMore = () => {
@@ -40,6 +49,17 @@ export default function Catalog() {
     cart.push(game)
     window.localStorage.setItem("cart", JSON.stringify(cart))
     window.alert(`${game.name} has been added to your cart!`)
+    getData()
+    getCart()
+  }
+
+  const removeFromCart = (game: Game) => {
+    const cart = JSON.parse(window.localStorage.getItem("cart") || "[]")
+    const updatedCart = cart.filter((item: Game) => item.id !== game.id)
+    window.localStorage.setItem("cart", JSON.stringify(updatedCart))
+    window.alert(`${game.name} has been removed from your cart!`)
+    getData()
+    getCart()
   }
 
   return (
@@ -85,9 +105,11 @@ export default function Catalog() {
               </div>
               <button
                 className="border-2 p-5 rounded-2xl border-[#3B3B3B] uppercase font-bold mt-5"
-                onClick={() => addToCart(game)}
+                onClick={() =>
+                  cart.find((item) => item.id === game.id) ? removeFromCart(game) : addToCart(game)
+                }
               >
-                Add to cart
+                {cart.find((item) => item.id === game.id) ? "Remove" : "Add to cart"}
               </button>
             </li>
           ))
